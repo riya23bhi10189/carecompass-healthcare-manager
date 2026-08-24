@@ -51,3 +51,4 @@ https://carecompass-healthcare-manager.onrender.com/login/?next=/
 
 ### Doctor
 - Doctor accounts are created and managed by the administrator.
+https://carecompass-healthcare-manager.onrender.com/
