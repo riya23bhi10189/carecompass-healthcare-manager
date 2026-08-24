@@ -38,7 +38,6 @@ CareCompass is a role-based healthcare appointment platform built with Django. I
 - Email: Django console email backend for demo mode
 - Background jobs: Django management command worker
 - Google Calendar: Google Calendar API adapter with OAuth 2.0 support
-https://carecompass-healthcare-manager.onrender.com/login/?next=/
 
 ## Demo Credentials
 
