@@ -1,0 +1,55 @@
+{% extends "clinic/base.html" %}
+
+{% block content %}
+  <h1>Find a doctor</h1>
+  <p>Search by medical specialization and book an available consultation.</p>
+
+  <div class="card">
+    <form method="get">
+      <label for="specialization">Search specialization</label>
+
+      <input
+        id="specialization"
+        type="text"
+        name="specialization"
+        value="{{ query }}"
+        placeholder="Example: Cardiologist"
+      >
+
+      <button type="submit">Search doctors</button>
+    </form>
+  </div>
+
+  <h2>Available doctors</h2>
+
+  {% for doctor in doctors %}
+    <div class="card">
+      <h3>
+        Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}
+      </h3>
+
+      <p><strong>Specialization:</strong> {{ doctor.specialization }}</p>
+
+      <p>
+        <strong>Working hours:</strong>
+        {{ doctor.working_start|time:"H:i" }}
+        –
+        {{ doctor.working_end|time:"H:i" }}
+      </p>
+
+      <p>
+        <strong>Slot duration:</strong>
+        {{ doctor.slot_duration }} minutes
+      </p>
+
+      <a href="{% url 'book_appointment' %}?doctor={{ doctor.id }}">
+        Book this doctor →
+      </a>
+    </div>
+
+  {% empty %}
+    <div class="card">
+      <p>No doctors found. Try another specialization.</p>
+    </div>
+  {% endfor %}
+{% endblock %}

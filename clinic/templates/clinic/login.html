@@ -1,0 +1,15 @@
+{% extends "clinic/base.html" %}
+
+{% block content %}
+  <div class="card">
+    <h1>Log in to CareCompass</h1>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Log in</button>
+    </form>
+
+    <p>New patient? <a href="{% url 'register' %}">Create an account</a></p>
+  </div>
+{% endblock %}

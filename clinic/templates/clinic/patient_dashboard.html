@@ -1,0 +1,87 @@
+{% extends "clinic/base.html" %}
+
+{% block content %}
+  <h1>Patient Portal</h1>
+  <p>Manage your appointments and follow your care journey.</p>
+
+  <p>
+    <a href="{% url 'doctor_search' %}">Find and book a doctor →</a>
+  </p>
+
+  <div class="card">
+    <h2>Care Journey</h2>
+    <p>✓ Appointment booked</p>
+    <p>✓ Symptoms submitted</p>
+    <p>✓ Doctor brief generated</p>
+    <p>○ Visit completed</p>
+    <p>○ Care plan and reminders</p>
+  </div>
+
+  <h2>My appointments</h2>
+
+  {% for appointment in appointments %}
+    <div class="card">
+      <h3>
+        Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.username }}
+      </h3>
+
+      <p><strong>Appointment:</strong> {{ appointment.start_at }}</p>
+      <p><strong>Status:</strong> <span class="badge">{{ appointment.status }}</span></p>
+      <p><strong>Urgency:</strong> {{ appointment.urgency }}</p>
+      {% if appointment.status == "CONFIRMED" or appointment.status == "ACTION_REQUIRED" %}
+        <p>
+            <a href="{% url 'reschedule_appointment' appointment.id %}">
+                Reschedule appointment →
+            </a>
+        </p>
+        <form
+            method="post"
+            action="{% url 'cancel_appointment' appointment.id %}"
+        >
+            {% csrf_token %}
+            <button type="submit">Cancel appointment</button>
+        </form>
+      {% endif %}
+
+      {% if appointment.pre_visit_summary %}
+        <hr>
+        <h3>Your pre-visit brief</h3>
+        <p>
+          <strong>Chief complaint:</strong>
+          {{ appointment.pre_visit_summary.chief_complaint }}
+        </p>
+      {% endif %}
+
+      {% if appointment.post_visit_summary %}
+        <hr>
+        <h3>Your care plan</h3>
+
+        <p>
+          <strong>Visit summary:</strong>
+          {{ appointment.post_visit_summary.summary }}
+        </p>
+
+        <p>
+          <strong>Medication schedule:</strong>
+          {{ appointment.post_visit_summary.medication_schedule }}
+        </p>
+
+        <p>
+          <strong>Follow-up steps:</strong>
+          {{ appointment.post_visit_summary.follow_up }}
+        </p>
+
+        <p>
+          <small>
+            Summary source: {{ appointment.post_visit_summary.source }}
+          </small>
+        </p>
+      {% endif %}
+    </div>
+
+  {% empty %}
+    <div class="card">
+      <p>You have no appointments yet.</p>
+    </div>
+  {% endfor %}
+{% endblock %}

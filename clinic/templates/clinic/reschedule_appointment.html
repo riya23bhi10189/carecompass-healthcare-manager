@@ -1,0 +1,18 @@
+{% extends "clinic/base.html" %}
+
+{% block content %}
+  <div class="card">
+    <h1>Reschedule appointment</h1>
+
+    <p>
+      Select a new doctor or appointment time. Your previous slot will be
+      safely updated only if the new slot is available.
+    </p>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Confirm new appointment time</button>
+    </form>
+  </div>
+{% endblock %}

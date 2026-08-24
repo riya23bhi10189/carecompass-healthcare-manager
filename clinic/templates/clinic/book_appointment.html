@@ -1,0 +1,24 @@
+{% extends "clinic/base.html" %}
+
+{% block content %}
+  <div class="card">
+    <h1>Book an appointment</h1>
+
+    <p>
+      Tell us about your symptoms before confirming. Your doctor will receive
+      an AI-generated pre-visit brief.
+    </p>
+
+    <form method="post">
+      {% csrf_token %}
+
+      {{ form.as_p }}
+
+      <button type="submit">Confirm appointment</button>
+    </form>
+  </div>
+
+  <p>
+    <a href="{% url 'doctor_search' %}">← Back to doctor search</a>
+  </p>
+{% endblock %}

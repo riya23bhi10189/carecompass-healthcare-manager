@@ -1,0 +1,62 @@
+{% extends "clinic/base.html" %}
+
+{% block content %}
+  <h1>Admin Portal — Doctor Leave Management</h1>
+  <p>
+    Adding leave checks confirmed appointments and creates rescheduling
+    notification jobs for affected patients.
+  </p>
+
+  <div class="card">
+    <h2>Mark doctor on leave</h2>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <label for="doctor">Doctor</label>
+      <select id="doctor" name="doctor" required>
+        <option value="">Select doctor</option>
+
+        {% for doctor in doctors %}
+          <option value="{{ doctor.id }}">
+            Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}
+            — {{ doctor.specialization }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <label for="leave_date">Leave date</label>
+      <input id="leave_date" type="date" name="leave_date" required>
+
+      <label for="reason">Reason (optional)</label>
+      <textarea
+        id="reason"
+        name="reason"
+        rows="3"
+        placeholder="Example: Medical conference"
+      ></textarea>
+
+      <button type="submit">Save leave and check conflicts</button>
+    </form>
+  </div>
+
+  <h2>Recorded leave days</h2>
+
+  {% for leave in leaves %}
+    <div class="card">
+      <strong>
+        Dr. {{ leave.doctor.user.get_full_name|default:leave.doctor.user.username }}
+      </strong>
+
+      <p>{{ leave.leave_date }}</p>
+
+      {% if leave.reason %}
+        <p>{{ leave.reason }}</p>
+      {% endif %}
+    </div>
+  {% empty %}
+    <div class="card">
+      <p>No leave days recorded yet.</p>
+    </div>
+  {% endfor %}
+{% endblock %}

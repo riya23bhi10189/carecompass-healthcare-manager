@@ -1,0 +1,62 @@
+{% extends "clinic/base.html" %}
+
+{% block content %}
+  <div class="card">
+    <h1>Complete patient visit</h1>
+
+    <p>
+      <strong>Patient:</strong>
+      {{ appointment.patient.get_full_name|default:appointment.patient.username }}
+    </p>
+
+    <p><strong>Symptoms:</strong> {{ appointment.symptoms }}</p>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <label for="doctor_notes">Clinical notes</label>
+      <textarea
+        id="doctor_notes"
+        name="doctor_notes"
+        rows="7"
+        required
+        placeholder="Example: Viral infection suspected. Rest, hydration, and monitoring advised."
+      ></textarea>
+
+      <label for="prescription">Prescription and dosage</label>
+      <textarea
+        id="prescription"
+        name="prescription"
+        rows="5"
+        placeholder="Example: Paracetamol 500 mg — twice daily after meals for 3 days"
+      ></textarea>
+
+      <hr>
+      <h3>Medication reminder</h3>
+      <p>Add one reminder for the demo. You can add more later through Django Admin.</p>
+      <label for="medicine_name">Medicine name</label>
+      <input
+        id="medicine_name"
+        name="medicine_name"
+        type="text"
+        placeholder="Example: Paracetamol 500 mg"
+      >
+      <label for="frequency">Frequency</label>
+      <input
+        id="frequency"
+        name="frequency"
+        type="text"
+        placeholder="Example: Twice daily after meals"
+      >
+
+      <label for="reminder_time">Reminder time</label>
+      <input
+        id="reminder_time"
+        name="reminder_time"
+        type="time"
+      >
+
+      <button type="submit">Generate patient care plan</button>
+    </form>
+  </div>
+{% endblock %}

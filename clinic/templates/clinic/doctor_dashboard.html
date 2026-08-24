@@ -1,0 +1,61 @@
+{% extends "clinic/base.html" %}
+
+{% block content %}
+  <h1>Doctor Portal</h1>
+  <p>Review each patient's pre-visit AI brief before the consultation.</p>
+
+  {% for appointment in appointments %}
+    <div class="card">
+      <h2>
+        {{ appointment.patient.get_full_name|default:appointment.patient.username }}
+      </h2>
+
+      <p><strong>Appointment:</strong> {{ appointment.start_at }}</p>
+      <p><strong>Submitted symptoms:</strong> {{ appointment.symptoms }}</p>
+
+      <p>
+        <strong>Urgency:</strong>
+        <span class="badge">{{ appointment.urgency }}</span>
+      </p>
+
+      {% if appointment.pre_visit_summary %}
+        <hr>
+
+        <h3>AI Pre-Visit Brief</h3>
+
+        <p>
+          <strong>Chief complaint:</strong>
+          {{ appointment.pre_visit_summary.chief_complaint }}
+        </p>
+
+        <p><strong>Suggested questions for this visit:</strong></p>
+
+        <ul>
+          {% for question in appointment.pre_visit_summary.suggested_questions %}
+            <li>{{ question }}</li>
+          {% endfor %}
+        </ul>
+
+        <p>
+          <small>
+            Summary source: {{ appointment.pre_visit_summary.source }}
+          </small>
+        </p>
+      {% endif %}
+
+      <span class="badge">{{ appointment.status }}</span>
+      {% if appointment.status == "CONFIRMED" %}
+      <p>
+        <a href="{% url 'complete_visit' appointment.id %}">
+            Complete visit and create care plan →
+        </a>
+    </p>
+    {% endif %}
+    </div>
+
+  {% empty %}
+    <div class="card">
+      <p>No appointments scheduled.</p>
+    </div>
+  {% endfor %}
+{% endblock %}
